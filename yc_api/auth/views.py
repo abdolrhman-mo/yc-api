@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import IsAuthenticated
+from yc_api.streaks.models import Streak
+
+
 
 class RegisterUserView(APIView):
     permission_classes = [AllowAny]
@@ -20,6 +23,9 @@ class RegisterUserView(APIView):
             return Response({"error": "Username already exists."}, status=status.HTTP_400_BAD_REQUEST)
 
         user = User.objects.create_user(username=username, password=password)
+        streak, created = Streak.objects.get_or_create(user=request.user)  #
+        streak.current_streak = 0  
+        streak.save()  
         return Response({"message": "User created successfully."}, status=status.HTTP_201_CREATED)
 
 class LoginUserView(APIView):
