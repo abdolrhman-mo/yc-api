@@ -50,4 +50,5 @@ urlpatterns = [
     path('api/', include('relationships.urls')),
     # Swagger UI
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-docs'),
+    path('api/',include("streaks.urls")),
 ]

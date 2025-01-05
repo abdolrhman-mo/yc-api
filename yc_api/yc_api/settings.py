@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'relationships',
     'drf_yasg',
+    'rest_framework_simplejwt',
+    'streaks',
 ]
 
 MIDDLEWARE = [
