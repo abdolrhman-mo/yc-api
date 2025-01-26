@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from yc_api.settings import AUTH_USER_MODEL as User
 
 class Relationship(models.Model):
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')

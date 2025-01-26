@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'rest_framework',
+    'rest_framework_swagger',
     'rest_framework_simplejwt.token_blacklist',
     'relationships',
     'drf_yasg',
@@ -143,6 +144,7 @@ REST_FRAMEWORK = {
     ),
 }
 
+
 # Simple JWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
@@ -150,3 +152,4 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
 }
+

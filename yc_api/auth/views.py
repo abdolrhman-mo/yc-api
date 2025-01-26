@@ -6,6 +6,8 @@ from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import IsAuthenticated
 from streaks.models import Streak
+from .serializers import UserSerializer
+
 
 from .serializers import UserSerializer
 

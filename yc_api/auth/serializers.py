@@ -1,4 +1,7 @@
-from rest_framework.serializers import Serializer
+from rest_framework import serializers
+from yc_api.settings import AUTH_USER_MODEL as User
 
-class UserSerializer(Serializer):
-    pass
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'date_joined'] 

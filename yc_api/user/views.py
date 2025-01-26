@@ -4,7 +4,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.authentication import TokenAuthentication
 
-from main.permissions import IsAccountOwnerOrAdmin
+from yc_api.permissions import IsAccountOwnerOrAdmin
 from .serializers import UserSerializer
 from .models import User
 from django.contrib.auth import authenticate
