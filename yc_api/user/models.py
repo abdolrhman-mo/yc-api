@@ -31,7 +31,7 @@ class UserManager(BaseUserManager):
         return self.create_user(username, password, **extra_fields)
 
 class User(AbstractUser):
-    username = models.CharField(max_length=150,unique=True)
+    username = models.CharField(max_length=150,unique=True, null=True, blank=True)
     is_active = models.BooleanField(default=False)  # Default is_active to False
 
     USERNAME_FIELD = 'username'

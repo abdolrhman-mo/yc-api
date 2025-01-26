@@ -17,7 +17,7 @@ def start_streak(request):
     streak.save()  
     serializer = StreakSerializer(streak)
     return Response(serializer.data)
-@api_view(['PUT']) 
+@api_view(['POST']) 
 def increment_streak(request):
     try:
         # Get the duration from the frontend (in minutes)
