@@ -6,6 +6,7 @@ dirs_to_clean = [
     '__pycache__',  # Python cache files
     'migrations'    # Migration files
 ]
+
 files_to_clean = [
     'db.sqlite3'    # SQLite database file
 ]

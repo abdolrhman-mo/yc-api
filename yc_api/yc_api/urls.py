@@ -41,6 +41,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("accounts/", include("django.contrib.auth.urls")),
+    
     # DRF Auth & JWT tokens URLs
     # path('api/auth/', include('auth.urls')),  # Add authentication app URLs
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

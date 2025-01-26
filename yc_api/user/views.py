@@ -2,7 +2,7 @@ from rest_framework import status, mixins, viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from yc_api.permissions import IsAccountOwnerOrAdmin
@@ -18,7 +18,7 @@ class UserViewSet(viewsets.GenericViewSet,
     """
     A viewset that provides the standard actions.
     """
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
 
     queryset = User.objects.all()
     serializer_class = UserSerializer

@@ -9,7 +9,7 @@ class UserManager(BaseUserManager):
         if not username:
             raise ValueError('The Username field must be set')
         
-        extra_fields.setdefault('is_active', False)  # Set is_active to False for regular users
+        extra_fields.setdefault('is_active', True)  # Set is_active to False for regular users
         user = self.model(username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -31,8 +31,8 @@ class UserManager(BaseUserManager):
         return self.create_user(username, password, **extra_fields)
 
 class User(AbstractUser):
-    username = models.CharField(max_length=150,unique=True, null=True, blank=True)
-    is_active = models.BooleanField(default=False)  # Default is_active to False
+    username = models.CharField(max_length=150,unique=True)
+    is_active = models.BooleanField(default=True)  # Default is_active to False
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
