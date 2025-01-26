@@ -1,5 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.decorators import action
+
 from .models import Relationship
 from .serializers import RelationshipSerializer
 
@@ -23,11 +25,13 @@ class RelationshipViewSet(viewsets.ModelViewSet):
 
     def follow(self, request, *args, **kwargs):
         """ Create a new relationship (follow a user) """
-        follower_id = request.data.get('follower_id')
-        following_id = request.data.get('following_id')
+        follower_id = request.data.get('follower')
+        following_id = request.data.get('following')
 
         if not follower_id or not following_id:
-            return Response({"error": "follower_id and following_id are required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error":
+                "follower_id and following_id are required (You can check if it's zero or not existed)"},
+                status=status.HTTP_400_BAD_REQUEST)
 
         if follower_id == following_id:
             return Response({"error": "You cannot follow yourself."}, status=status.HTTP_400_BAD_REQUEST)
@@ -38,18 +42,37 @@ class RelationshipViewSet(viewsets.ModelViewSet):
         Relationship.objects.create(follower_id=follower_id, following_id=following_id)
         return Response({"message": "Followed successfully"}, status=status.HTTP_201_CREATED)
 
-    def unfollow(self, request, *args, **kwargs):
+
+    @action(detail=False, methods=['delete'], url_path='unfollow/(?P<follower_id>[0-9]+)/(?P<following_id>[0-9]+)')
+    def unfollow(self, request, follower_id=None, following_id=None):
         """ Delete a relationship (unfollow a user) """
-        follower_id = request.data.get('follower_id')
-        following_id = request.data.get('following_id')
-
+        
         if not follower_id or not following_id:
-            return Response({"error": "follower_id and following_id are required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "follower_id and following_id are required"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-        relationship = Relationship.objects.filter(follower=follower_id, following=following_id).first()
+        relationship = Relationship.objects.filter(follower_id=follower_id, following_id=following_id).first()
 
         if not relationship:
             return Response({"error": "Relationship does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
         relationship.delete()
         return Response({"message": "Unfollowed successfully"}, status=status.HTTP_200_OK)
+
+    # def unfollow(self, request, *args, **kwargs):
+    #     """ Delete a relationship (unfollow a user) """
+    #     follower_id = request.data.get('follower')
+    #     following_id = request.data.get('following')
+
+    #     if not follower_id or not following_id:
+    #         return Response({"error": 
+    #             "follower_id and following_id are required (You can check if it's zero or not existed)"},
+    #             status=status.HTTP_400_BAD_REQUEST)
+
+    #     relationship = Relationship.objects.filter(follower=follower_id, following=following_id).first()
+
+    #     if not relationship:
+    #         return Response({"error": "Relationship does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    #     relationship.delete()
+    #     return Response({"message": "Unfollowed successfully"}, status=status.HTTP_200_OK)

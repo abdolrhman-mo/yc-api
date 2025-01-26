@@ -1,9 +1,9 @@
 from django.db import models
-from yc_api.settings import AUTH_USER_MODEL as User
+from user.models import User
 
 class Relationship(models.Model):
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
-    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following_set')
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers_set')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
