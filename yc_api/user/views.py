@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from yc_api.permissions import IsAccountOwnerOrAdmin
 from .serializers import UserSerializer
@@ -29,6 +30,8 @@ class UserViewSet(viewsets.GenericViewSet,
         """
         if self.action in ['create']:
             self.permission_classes = [permissions.AllowAny]
+        elif self.action in ['list']:
+            self.permission_classes=[IsAuthenticated]
         elif self.action in ['destroy']:
             self.permission_classes = [permissions.IsAdminUser]
         else:
@@ -38,17 +41,17 @@ class UserViewSet(viewsets.GenericViewSet,
     @action(detail=False, methods=['post'], url_path='login')
     def login(self, request):
         """
-        Log in a user using email and password, and return token and user data.
+        Log in a user using username and password, and return token and user data.
         """
-        email = request.data.get('email')
+        username = request.data.get('username')
         password = request.data.get('password')
 
-        if not email or not password:
-            return Response({'detail': 'Email and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not username or not password:
+            return Response({'detail': 'username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, username=username, password=password)
         if user is None:
-            return Response({'detail': 'Invalid email or password'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail': 'Invalid username or password'}, status=status.HTTP_404_NOT_FOUND)
 
         token, created = Token.objects.get_or_create(user=user)
         serializer = UserSerializer(user)
