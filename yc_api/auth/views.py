@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import IsAuthenticated
 from streaks.models import Streak
 
+from .serializers import UserSerializer
 
 
 class RegisterUserView(APIView):
@@ -23,7 +24,7 @@ class RegisterUserView(APIView):
             return Response({"error": "Username already exists."}, status=status.HTTP_400_BAD_REQUEST)
 
         user = User.objects.create_user(username=username, password=password)
-       
+        
         return Response({"message": "User created successfully."}, status=status.HTTP_201_CREATED)
 
 class LoginUserView(APIView):
@@ -49,3 +50,11 @@ class LogoutUserView(APIView):
     def post(self, request):
         logout(request)
         return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
+    
+class UserListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

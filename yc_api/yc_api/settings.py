@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'relationships',
     'drf_yasg',
     'rest_framework_simplejwt',
     'streaks',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +59,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'yc_api.urls'
+AUTH_USER_MODEL = 'user.User'
 
 TEMPLATES = [
     {
