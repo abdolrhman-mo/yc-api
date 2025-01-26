@@ -4,7 +4,7 @@ from .models import Streak, StudyLog
 class StreakSerializer(serializers.ModelSerializer):
     class Meta:
         model = Streak
-        fields = ['id', 'user', 'current_streak', 'top_streak']
+        fields = ['id', 'user', 'current_streak', 'top_streak', 'last_study_date']
         read_only_fields = ['id', 'user', 'current_streak', 'top_streak']  # Prevent updates to these fields
 
 class StudyLogSerializer(serializers.ModelSerializer):

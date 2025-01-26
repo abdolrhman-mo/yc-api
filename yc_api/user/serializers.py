@@ -7,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
     token = serializers.SerializerMethodField()
     class Meta(object):
         model = User
-        fields = ['id','password', 'username', 'groups', 'token', 'first_name', 'last_name']
+        fields = ['id','password', 'username', 'token', 'first_name', 'last_name', 'top_streak', 'current_streak'] # I delete the groups
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_token(self, obj):
@@ -15,17 +15,17 @@ class UserSerializer(serializers.ModelSerializer):
         return token.key
     
     def create(self, validated_data):
-        groups_data = validated_data.pop('groups', [])
+        # groups_data = validated_data.pop('groups', [])
 
         user  =  User.objects.create_user(**validated_data)
 
-        if not groups_data:
-            default_groups = Group.objects.get(name='Viewer')
-            user.groups.add(default_groups)
-        else:
-            for group in groups_data:
-                group_obj = Group.objects.get(name=group)
-                user.groups.add(group_obj)
+        # if not groups_data:
+        #     default_groups = Group.objects.get(name='Viewer')
+        #     user.groups.add(default_groups)
+        # else:
+        #     for group in groups_data:
+        #         group_obj = Group.objects.get(name=group)
+        #         user.groups.add(group_obj)
 
         token = Token.objects.create(user=user)
 

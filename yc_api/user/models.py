@@ -33,7 +33,8 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = models.CharField(max_length=150,unique=True)
     is_active = models.BooleanField(default=True)  # Default is_active to False
-
+    top_streak = models.IntegerField(default=0, blank=True, null=True)
+    current_streak = models.IntegerField(default=0, blank=True, null=True)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 

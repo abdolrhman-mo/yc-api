@@ -23,8 +23,9 @@ class StreakViewSet(mixins.ListModelMixin,
     @action(detail=False, methods=['post'], url_path='increment')
     def increment_streak(self, request):
         """ Increment user's streak based on study session duration """
-
+        
         try:
+            user = request.user
             # Get the duration from the frontend (in minutes)
             duration = request.data.get("duration", 0)
 
@@ -39,12 +40,15 @@ class StreakViewSet(mixins.ListModelMixin,
 
             if not streak:
                 streak = Streak.objects.create(user=request.user, last_study_date=date.today(), top_streak=1, current_streak=1)
+                user.top_streak = streak.top_streak
                 # return Response({"error": "Streak not found"}, status=status.HTTP_404_NOT_FOUND)
 
             today = date.today()
+            user.current_streak = streak.current_streak
+            user.save()
+            # print(user.)
 
             if streak.last_study_date == today:
-                # print(streak.last_study_date - today)
                 return Response({"current_streak ": streak.current_streak}, status=status.HTTP_200_OK)
 
             if today - timedelta(days=1) == streak.last_study_date :
@@ -53,9 +57,11 @@ class StreakViewSet(mixins.ListModelMixin,
                 # Gap in streak
                 streak.current_streak = 1
 
-            if streak.current_streak > streak.top_streak:
+            if streak.current_streak > user.top_streak:
                 streak.top_streak = streak.current_streak
-
+                # user.top_streak = streak.current_streak
+                user.top_streak = streak.top_streak
+            user.save()
             streak.last_study_date = today
             streak.save()
             serializer = StreakSerializer(streak)
