@@ -1,9 +1,9 @@
-from rest_framework import status, mixins, viewsets, permissions
+from rest_framework import status, mixins, viewsets
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 from yc_api.permissions import IsAccountOwnerOrAdmin
 from .serializers import UserSerializer
@@ -28,14 +28,18 @@ class UserViewSet(viewsets.GenericViewSet,
         """
         Customize permissions based on the action.
         """
-        if self.action in ['create']:
-            self.permission_classes = [permissions.AllowAny]
-        elif self.action in ['list']:
-            self.permission_classes=[IsAuthenticated]
-        elif self.action in ['destroy']:
-            self.permission_classes = [permissions.IsAdminUser]
-        else:
+        if self.action in ['destroy', 'update']:
             self.permission_classes = [IsAccountOwnerOrAdmin]
+        else:
+            self.permission_classes = [AllowAny]
+        # if self.action in ['create']:
+        #     self.permission_classes = [AllowAny]
+        # elif self.action in ['list']:
+        #     self.permission_classes=[IsAuthenticated]
+        # elif self.action in ['destroy']:
+        #     self.permission_classes = [IsAdminUser]
+        # else:
+        #     self.permission_classes = [IsAccountOwnerOrAdmin]
         return super().get_permissions()
 
     @action(detail=False, methods=['post'], url_path='login')
