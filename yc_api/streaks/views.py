@@ -4,6 +4,7 @@ from rest_framework.decorators import action
 from .models import Streak, StudyLog
 from .serializers import StreakSerializer, StudyLogSerializer
 from datetime import date, timedelta
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 
 class StreakViewSet(mixins.ListModelMixin,
                     viewsets.GenericViewSet):
@@ -11,6 +12,7 @@ class StreakViewSet(mixins.ListModelMixin,
 
     queryset = Streak.objects.all()
     serializer_class = StreakSerializer
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
 
     def get_serializer_class(self):
         if self.action == 'list':

@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 
 from .models import Relationship
 from .serializers import RelationshipSerializer
@@ -8,6 +9,7 @@ from .serializers import RelationshipSerializer
 class RelationshipViewSet(viewsets.ModelViewSet):
     queryset = Relationship.objects.all()
     serializer_class = RelationshipSerializer
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
 
     def followers(self, request, *args, **kwargs):
         """ Get followers of the authenticated user """
