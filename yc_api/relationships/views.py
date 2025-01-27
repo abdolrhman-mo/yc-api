@@ -63,5 +63,5 @@ class RelationshipViewSet(viewsets.ModelViewSet):
     def check(self, request, follower_id=None, following_id=None):
         if Relationship.objects.filter(follower=follower_id, following_id=following_id).exists():
             return Response({"message": "Relationship exists"}, status=status.HTTP_200_OK)
-        return Response({"message": "Relationship does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"message": "Relationship does not exist"}, status=status.HTTP_200_OK)
     
