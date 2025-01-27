@@ -32,4 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-
+class UserWithStreaksSerailizer(serializers.ModelSerializer):
+    class Meta(object):
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'top_streak', 'current_streak']
