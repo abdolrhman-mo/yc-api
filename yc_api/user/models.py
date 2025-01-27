@@ -35,6 +35,7 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=True)  # Default is_active to False
     top_streak = models.IntegerField(default=0, blank=True, null=True)
     current_streak = models.IntegerField(default=0, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 

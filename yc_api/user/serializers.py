@@ -7,7 +7,8 @@ class UserSerializer(serializers.ModelSerializer):
     token = serializers.SerializerMethodField()
     class Meta(object):
         model = User
-        fields = ['id','password', 'username', 'token', 'first_name', 'last_name', 'top_streak', 'current_streak'] # I delete the groups
+        fields = ['id','password', 'username', 'token', 'first_name',
+                    'last_name', 'top_streak', 'current_streak', 'profile_picture'] # I delete the groups
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_token(self, obj):
@@ -35,4 +36,4 @@ class UserSerializer(serializers.ModelSerializer):
 class UserWithStreaksSerailizer(serializers.ModelSerializer):
     class Meta(object):
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'top_streak', 'current_streak']
+        fields = ['id', 'username', 'first_name', 'last_name', 'top_streak', 'current_streak', 'profile_picture']
