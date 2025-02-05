@@ -24,50 +24,48 @@ class StreakViewSet(mixins.ListModelMixin,
 
     @action(detail=False, methods=['post'], url_path='increment')
     def increment_streak(self, request):
-        """ Increment user's streak based on study session duration """
-        
-        try:
-            user = request.user
-            # Get the duration from the frontend (in minutes)
-            duration = request.data.get("duration", 0)
+        """ Increment user's streak based on daily study """
+        user = request.user
+        duration = request.data.get("duration")
 
-            if duration < 25:
-                return Response({"error": "Study session must be at least 25 minutes."}, status=status.HTTP_400_BAD_REQUEST)
+        if not duration or int(duration) < 25:
+            return Response({"error": "Study session must be at least 25 minutes."}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Log the study session
-            StudyLog.objects.create(user=request.user, study_date=date.today(), duration=duration)
+        today = date.today()
 
-            # Handle streak logic
-            streak = self.get_queryset().first()
+        # Log the study session
+        StudyLog.objects.create(user=user, study_date=today, duration=duration)
 
-            if not streak:
-                streak = Streak.objects.create(user=request.user, last_study_date=date.today(), top_streak=1, current_streak=1)
-                user.top_streak = streak.top_streak
-                # return Response({"error": "Streak not found"}, status=status.HTTP_404_NOT_FOUND)
+        # Retrieve or create the user's streak
+        streak, created = Streak.objects.get_or_create(user=user, defaults={
+            'last_study_date': today,
+            'current_streak': 1,
+            'top_streak': 1
+        })
 
-            today = date.today()
-            user.current_streak = streak.current_streak
-            user.save()
-            # print(user.)
-
+        if not created:
             if streak.last_study_date == today:
-                return Response({"current_streak ": streak.current_streak}, status=status.HTTP_200_OK)
-
-            if today - timedelta(days=1) == streak.last_study_date :
+                # Already studied today, no streak increment needed
+                pass
+            elif streak.last_study_date == today - timedelta(days=1):
+                # Consecutive day, increment the streak
                 streak.current_streak += 1
             else:
-                # Gap in streak
+                # Missed a day, reset the current streak
                 streak.current_streak = 1
 
-            if streak.current_streak > user.top_streak:
+            # Update top streak if current streak exceeds it
+            if streak.current_streak > streak.top_streak:
                 streak.top_streak = streak.current_streak
-                # user.top_streak = streak.current_streak
-                user.top_streak = streak.top_streak
-            user.save()
+
             streak.last_study_date = today
             streak.save()
-            serializer = StreakSerializer(streak)
-            return Response(serializer.data, status=status.HTTP_200_OK)
 
-        except Streak.DoesNotExist:
-            return Response({"error": "Streak not found"}, status=status.HTTP_404_NOT_FOUND)
+        # Update user's current and top streaks
+        user.current_streak = streak.current_streak
+        user.top_streak = streak.top_streak
+        user.last_study_date = streak.last_study_date
+        user.save()
+
+        serializer = StreakSerializer(streak)
+        return Response(serializer.data, status=status.HTTP_200_OK)

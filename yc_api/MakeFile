@@ -1,2 +1,5 @@
 run:
 	python manage.py runserver
+mkmig:
+	python manage.py makemigtrations
+runmig: run mkmig

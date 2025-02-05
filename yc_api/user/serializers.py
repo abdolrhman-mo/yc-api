@@ -8,7 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = User
         fields = ['id','password', 'username', 'token', 'first_name',
-                    'last_name', 'top_streak', 'current_streak', 'profile_picture'] # I delete the groups
+                    'last_name', 'top_streak', 'current_streak', 'profile_picture', 'last_study_date'] # I delete the groups
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_token(self, obj):
