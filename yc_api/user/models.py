@@ -37,6 +37,8 @@ class User(AbstractUser):
     current_streak = models.IntegerField(default=0, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     last_study_date = models.DateField(null=True, blank=True)
+    followers_count = models.IntegerField(default=0)
+    following_count = models.IntegerField(default=0)
     # last_start_study_date = models.DateField(auto_now=True)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
