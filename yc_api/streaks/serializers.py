@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Streak, StudyLog
+from .models import Streak, StudySession
 
 class StreakSerializer(serializers.ModelSerializer):
     class Meta:
@@ -7,8 +7,8 @@ class StreakSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'current_streak', 'top_streak', 'last_study_date']
         read_only_fields = ['id', 'user', 'current_streak', 'top_streak']  # Prevent updates to these fields
 
-class StudyLogSerializer(serializers.ModelSerializer):
+class StudySessionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = StudyLog
+        model = StudySession
         fields = ['id', 'user', 'study_date', 'duration']
         read_only_fields = ['id', 'user', 'study_date']  # `study_date` is automatically set

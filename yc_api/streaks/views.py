@@ -1,8 +1,9 @@
 from rest_framework import viewsets, status, mixins
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Streak, StudyLog
-from .serializers import StreakSerializer, StudyLogSerializer
+from .models import Streak, StudySession
+from .serializers import StreakSerializer, StudySessionSerializer
+
 from datetime import date, timedelta
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 
@@ -17,7 +18,8 @@ class StreakViewSet(mixins.ListModelMixin,
     def get_serializer_class(self):
         if self.action == 'list':
             return StreakSerializer
-        return StudyLogSerializer
+        return StudySessionSerializer
+        
     def get_queryset(self):
         """ Return streaks only for the authenticated user """
         return Streak.objects.filter(user=self.request.user)
@@ -34,7 +36,7 @@ class StreakViewSet(mixins.ListModelMixin,
         today = date.today()
 
         # Log the study session
-        StudyLog.objects.create(user=user, study_date=today, duration=duration)
+        StudySession.objects.create(user=user, study_date=today, duration=duration)
 
         # Retrieve or create the user's streak
         streak, created = Streak.objects.get_or_create(user=user, defaults={

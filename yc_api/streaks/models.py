@@ -11,7 +11,7 @@ class Streak(models.Model):
     def __str__(self): 
         return f"{self.user.username} - Current: {self.current_streak}, Top: {self.top_streak}"
 
-class StudyLog(models.Model):
+class StudySession(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="study_logs")
     study_date = models.DateField(null=True, blank=True)  
     duration = models.IntegerField()  
