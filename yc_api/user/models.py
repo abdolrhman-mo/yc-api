@@ -39,6 +39,7 @@ class User(AbstractUser):
     last_study_date = models.DateField(null=True, blank=True)
     followers_count = models.IntegerField(default=0)
     following_count = models.IntegerField(default=0)
+    total_study_hours = models.IntegerField(default=0)
     # last_start_study_date = models.DateField(auto_now=True)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []

@@ -60,11 +60,12 @@ class StreakViewSet(mixins.ListModelMixin,
 
             streak.last_study_date = today
             streak.save()
-
+        
         # Update user's current and top streaks
         user.current_streak = streak.current_streak
         user.top_streak = streak.top_streak
         user.last_study_date = streak.last_study_date
+        user.total_study_hours += duration
         user.save()
 
         serializer = StreakSerializer(streak)
